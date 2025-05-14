@@ -43,6 +43,17 @@ function Search() {
     fetchApi();
   }, [debounced]);
 
+  const handleChange = (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue.startsWith(" ")) {
+      setSearchValue(searchValue);
+    }
+  };
+
+  // const handleSubmit = (e) => {
+
+  // }
+
   const handleClear = () => {
     setSearchValue("");
     setSearchResult([]);
@@ -54,48 +65,55 @@ function Search() {
   };
 
   return (
-    <HeadlessTippy
-      visible={showResult && searchResult.length > 0}
-      interactive
-      render={(attrs) => (
-        <div className={cx("search-result")} tabIndex={-1} {...attrs}>
-          <PopperWrapper>
-            <h3 className={cx("search-title")}>Acounts</h3>
-            {searchResult.map((result) => (
-              <AccountItem key={result.id} data={result} />
-            ))}
-          </PopperWrapper>
+    // Using a wrapper <div> or <span> tag around the reference element solves this by creating a new parentNode context
+
+    <span>
+      <HeadlessTippy
+        visible={showResult && searchResult.length > 0}
+        interactive
+        render={(attrs) => (
+          <div className={cx("search-result")} tabIndex={-1} {...attrs}>
+            <PopperWrapper>
+              <h3 className={cx("search-title")}>Acounts</h3>
+              {searchResult.map((result) => (
+                <AccountItem key={result.id} data={result} />
+              ))}
+            </PopperWrapper>
+          </div>
+        )}
+        onClickOutside={handleHideResult}
+      >
+        <div className={cx("search")}>
+          <input
+            ref={inputRef}
+            value={searchValue}
+            placeholder="Search acounts and videos"
+            spellCheck={false}
+            onChange={handleChange}
+            onFocus={() => setShowResult(true)}
+          />
+
+          {!!searchValue && !loading && (
+            <button className={cx("close")} onClick={handleClear}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </button>
+          )}
+
+          {loading && (
+            <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
+          )}
+
+          <Tippy content="Tìm kiếm" placement="right">
+            <button
+              className={cx("search-btn")}
+              onMouseDown={(e) => e.preventDefault()}
+            >
+              <SearchIcon />
+            </button>
+          </Tippy>
         </div>
-      )}
-      onClickOutside={handleHideResult}
-    >
-      <div className={cx("search")}>
-        <input
-          ref={inputRef}
-          value={searchValue}
-          placeholder="Search acounts and videos"
-          spellCheck={false}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onFocus={() => setShowResult(true)}
-        />
-
-        {!!searchValue && !loading && (
-          <button className={cx("close")} onClick={handleClear}>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
-        )}
-
-        {loading && (
-          <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
-        )}
-
-        <Tippy content="Tìm kiếm" placement="right">
-          <button className={cx("search-btn")}>
-            <SearchIcon />
-          </button>
-        </Tippy>
-      </div>
-    </HeadlessTippy>
+      </HeadlessTippy>
+    </span>
   );
 }
 
