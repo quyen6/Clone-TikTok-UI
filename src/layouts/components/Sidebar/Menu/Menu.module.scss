@@ -1,0 +1,36 @@
+.menu-item {
+  display: flex;
+  font-size: 1.8rem;
+  font-weight: 700;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-hover);
+  }
+
+  &.active {
+    color: var(--primary); // màu giữ nguyên khi đang ở trang đó
+
+    .icon {
+      display: none;
+    }
+    .active-icon {
+      display: flex;
+    }
+  }
+}
+.title {
+  margin-left: 15px;
+}
+
+.icon,
+.active-icon {
+  display: flex;
+}
+
+.active-icon {
+  display: none;
+}

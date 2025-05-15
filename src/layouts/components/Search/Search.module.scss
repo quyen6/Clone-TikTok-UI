@@ -20,6 +20,7 @@
     font-size: var(--fz);
     background-color: transparent;
     caret-color: var(--primary);
+    padding-right: 40px;
   }
 
   input:not(:placeholder-shown) ~ .search-btn {
